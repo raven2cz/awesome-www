@@ -65,3 +65,5 @@ window manager.
  </div>
 
 This is gonna be LEGEN... wait for it... DARY!
+
+[[!img images/awesome-youtube-15yrs-anniversary.png alt="awesome screenshot" size="250x250"]]

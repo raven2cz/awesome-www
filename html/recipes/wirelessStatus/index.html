@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>wirelessStatus - awesome window manager</title>
+<link rel="icon" href="../../images/icons/aw_16.png" type="image/png" />
+<link rel="stylesheet" href="../../style.css" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="../../local.css" type="text/css" />
+
+
+</head>
+<body>
+<div id="wrap">
+    <a href="https://github.com/awesomeWM/awesome"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+    <div id="top">
+      
+	<div id="center-logo">
+	  <a href="../../index.html" title="Back to main page">
+	    <img alt="awesome-logo" src="../../images/awesome-logo-1.png">
+	  </a>
+	</div>
+        <div id="menu">
+          <ul class="active-menu-wirelessStatus">
+            <li class="menu-about"><a href="../../index.html">home</a></li>
+            <li class="menu-download"><a href="../../download/">download</a></li>
+            <li class="menu-community"><a href="../../community/">community</a></li>
+            <li class="menu-recipes"><a href="../../recipes/">recipes</a></li>
+            <li class="menu-screenshots"><a href="../../screenshots/">screenshots</a></li>
+            <li class="menu-doc"><a href="../../doc/">doc</a></li>
+            <li class="menu-issues"><a href="https://github.com/awesomeWM/awesome/issues">bugs/issues</a></li>
+            </ul>
+        </div>
+    </div>
+
+    
+
+    
+
+    <div id="content">
+    <!--    <h1>wirelessStatus</h1> -->
+        <div id="left">
+          <h1>Wireless status widget/watcher</h1>
+
+<p>Get wireless Quality link (converted to percentages) and wireless status.</p>
+
+<p>Data is taken from <code>/proc/net/wireless</code>.</p>
+
+<p>According to <a href="https://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Linux.Wireless.Extensions.html">this</a>
+website <code>/proc/net/wireless</code> has the following information:</p>
+
+<ul>
+<li><p>Status: Its current state. This is a device dependent information.</p></li>
+<li><p>Quality - link: general quality of the reception.</p></li>
+<li><p>Quality - level: signal strength at the receiver.</p></li>
+<li><p>Quality - noise: silence level (no packet) at the receiver.</p></li>
+<li><p>Discarded - nwid: number of discarded packets due to invalid network id.</p></li>
+<li><p>Discarded - crypt: number of packet unable to decrypt.</p></li>
+<li><p>Discarded - misc: unused (for now).</p></li>
+</ul>
+
+<p>This widget uses <code>Quality - link</code> and converts it to percentages (<code>perc=Quality_link*10/7</code>).
+The above equation is taken from <a href="https://superuser.com/a/1360447">this</a> forum answer.</p>
+
+<p>It also stores <code>Status</code> information (note that this is presumably device dependent).</p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li><code>iw</code></li>
+</ul>
+
+<h2>Usage</h2>
+
+<ul>
+<li><p>Download <a href="https://awesomewm.org/recipes/wirelessStatus.lua">wirelessStatus.lua</a> file and put it
+into awesome's folder (like <code>~/.config/awesome/widgets/wirelessStatus.lua</code>)</p></li>
+<li><p>Add widget to <code>theme.lua</code>:</p></li>
+</ul>
+
+<p><code>lua
+local widgets = {
+    wirelessStatus = require("widgets/wirelessStatus"),
+}
+-- Wireless status widget (`status` is presumably device dependent)
+theme.wirelessStatus = widgets.wirelessStatus({
+    notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
+    timeout = 10,
+    settings = function(self)
+        if self.status == "1" or self.status == "" then
+            self.widget:set_image(theme.wifidisc)
+        else
+            if self.perc &lt;= 5 then
+                self.widget:set_image(theme.wifinone)
+            elseif self.perc &lt;= 25 then
+                self.widget:set_image(theme.wifilow)
+            elseif self.perc &lt;= 50 then
+                self.widget:set_image(theme.wifimed)
+            elseif self.perc &lt;= 75 then
+                self.widget:set_image(theme.wifihigh)
+            else
+                self.widget:set_image(theme.wififull)
+            end
+        end
+    end,
+})
+local widget_wirelessStatus = wibox.widget { nil, theme.wirelessStatus.widget, layout = wibox.layout.align.horizontal }
+</code></p>
+
+<ul>
+<li>Set which application to run on widget press (add to <code>rc.lua</code>):</li>
+</ul>
+
+<p><code>lua
+-- wirelessStatus widget pressed function - open terminal and start `nmtui`
+beautiful.wirelessStatus.pressed = function(self, button)
+    if button == 1 then  -- left mouse click
+        awful.spawn(terminal.." -e nmtui")
+    end
+end
+</code></p>
+
+        </div>
+        <!--
+        <div id="right">
+            <ul id="nav">
+                <li><a href="/">home</a></li>
+            </ul>
+            <div class="box">
+                <h2 style="margin-top:17px">Latest news</h2>
+                <ul>
+                    <li><a href="#">Recent Entries1</a> <i>01 Des 06</i></li>
+               </ul>
+            </div>
+       </div>
+        -->
+    </div>
+</div>
+
+<div id="clear"></div>
+
+<div id="footer">
+    <div id="pageinfo">
+
+    
+
+    <script type='text/javascript' src='https://www.openhub.net/p/awesome/widgets/project_factoids_stats?format=js'></script>
+
+    <div id="donate">
+      <strong>Donations:</strong>
+      <div>
+      <script id='fbirvwx'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='https://button.flattr.com/view/?fid=mqwonm&button=compact&url=https%3A%2F%2Fawesomewm.org%2F';f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('fbirvwx');</script>
+      </div>
+      <p>Bitcoin: 1A2LsrF81rWEEJ7qnXdkCUJpdCYUxqfQoP</p>
+    </div>
+
+    <div class="copyright">
+        <a id="pagecopyright"></a>
+        
+        Copyleft 2007-2022, AwesomeWM project
+    </div>
+    
+
+    <div class="pagedate">
+        Last edited <span class="date">Sat 10 Sep 2022 05:05:09 PM CEST</span>
+    </div>
+
+    </div>
+
+<!-- from about -->
+</div>
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setCookieDomain", "*.awesomewm.org"]);
+  _paq.push(["setDomains", ["*.awesomewm.org"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://piwik.awesomewm.org/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 26]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="https://piwik.awesomewm.org/piwik.php?idsite=26" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
+
+</body>
+</html>
