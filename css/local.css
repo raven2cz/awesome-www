@@ -26,16 +26,20 @@ body {
   width: 100%;
   background-color: var(--background-color);
   color: var(--color);
-  background-image: linear-gradient(to top, transparent, var(--background-gradient-color));
-  background-size: 100% 3%;
-  background-position: top;
-  background-repeat: no-repeat;
 }
 
 body.expand {
   transition:
     color var(--duration) var(--timing),
     background-color var(--duration) var(--timing);
+}
+
+.top-gradient {
+  background-image:
+      linear-gradient(to top, transparent, var(--background-gradient-color));
+  background-size: 100% 3%;
+  background-position: top;
+  background-repeat: no-repeat;
 }
 
 .preload {
@@ -136,6 +140,12 @@ iframe {
   padding-top: 80px;
   width: 40%;
   max-width: 800px;
+}
+
+@media only screen and (max-width: 800px) {
+  #justified-logo img {
+    width: 60%;
+  }
 }
 
 .standout {
@@ -357,10 +367,21 @@ footer p {
   z-index: 98;
 }
 
-#nav-logo {
+#nav-logo-dark {
   width: 200px;
   transition: 0.4s;
   display: none;
+}
+
+#nav-logo-light {
+  width: 200px;
+  transition: 0.4s;
+  display: none;
+}
+
+.zero-margins {
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 .cta,
@@ -400,7 +421,8 @@ footer p {
 
 .cta {
   padding: 9px 25px;
-  background-color: rgba(89, 146, 157, 1);
+  color: var(--button-text-color);
+  background-color: var(--button-background-color);
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -408,7 +430,7 @@ footer p {
 }
 
 .cta:hover {
-  background-color: rgba(89, 146, 157, 0.6);
+  background-color: var(--button-background-color-transparent);
 }
 
 /* Mobile Nav */

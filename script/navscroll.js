@@ -3,18 +3,31 @@ window.onscroll = function() { scrollFunction() };
 scrollFunction();
 
 function scrollFunction() {
-  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
-    document.getElementById("navbar").style.padding = "10px 10px";
-    document.getElementById("navbar").style.backgroundColor = "var(--nav-background-color)";
-    document.getElementById("navbar").style.borderStyle = "solid";
-    document.getElementById("nav-logo").style.width = "300px";
-    document.getElementById("nav-logo").style.display = "initial";
+  let navbar = document.getElementById("navbar");
+  let navLogoDark = document.getElementById("nav-logo-dark");
+  let navLogoLight = document.getElementById("nav-logo-light");
 
+  if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+    navbar.style.padding = "10px 10px";
+    navbar.style.backgroundColor = "var(--nav-background-color)";
+    navbar.style.borderStyle = "solid";
+    if (siteVars['theme_forced'] == 'dark') {
+      navLogoDark.style.width = "300px";
+      navLogoDark.style.display = "initial";
+    } else {
+      navLogoLight.style.width = "300px";
+      navLogoLight.style.display = "initial";
+    }
   } else {
-    document.getElementById("navbar").style.padding = "35px 10%";
-    document.getElementById("navbar").style.backgroundColor = "var(--nav-background-color-transparent)";
-    document.getElementById("navbar").style.borderStyle = "hidden";
-    document.getElementById("nav-logo").style.width = "400px";
-    document.getElementById("nav-logo").style.display = "none";
+    navbar.style.padding = "35px 10%";
+    navbar.style.backgroundColor = "var(--nav-background-color-transparent)";
+    navbar.style.borderStyle = "hidden";
+    if (siteVars['theme_forced'] == 'dark') {
+      navLogoDark.style.width = "400px";
+      navLogoDark.style.display = "none";
+    } else {
+      navLogoLight.style.width = "400px";
+      navLogoLight.style.display = "none";
+    }
   }
 }
