@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        watch - awesome window manager
+    </title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="supported-color-schemes" content="dark light">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="">
+
+    <link rel="stylesheet" type="text/css" href="../../style.css">
+    <link rel="stylesheet" type="text/css" href="../../css/mode-switch.css">
+    <link rel="stylesheet" type="text/css" href="../../css/local.css" />
+    <link id="css-lightmode" rel="stylesheet" type="text/css" href="../../css/light.css"
+        media="(prefers-color-scheme: no-preference), (prefers-color-scheme: light)" />
+    <link id="css-darkmode" rel="stylesheet" type="text/css" href="../../css/dark.css"
+        media="(prefers-color-scheme: dark)" />
+
+    <script src="../../script/dark-light-mode.js"></script>
+
+    <link rel="icon" href="../../images/icons/aw_16.png" type="image/png" />
+
+    
+    
+
+    <meta property="og:title" content="home" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="description" content="The awesomewm.org website" />
+    <meta property="og:description" content="The awesomewm.org website" />
+    <link rel="canonical" href="https://awesomewm.org/" />
+    <meta property="og:url" content="https://awesomewm.org/" />
+    <meta property="og:site_name" content="awesome window manager" />
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+        {"@context": "https://schema.org","@type": "WebSite","description": "The awesomewm.org website","headline": "home","name": "awesome window manager","publisher": {"@type": "Organization","logo": {"@type": "ImageObject","url": "https://awesomewm.org/images/icons/aw_64.png"}},"url": "https://awesomewm.org/"}</script>
+</head>
+<body class="top-gradient">
+    <header id="pageheader">
+        <a href="https://github.com/awesomeWM/awesome"><img class="fork-me-banner"
+                src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67"
+                alt="Fork me on GitHub"
+                data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"></a>
+
+        <figure class="darkmode" id="justified-logo">
+            <img alt="awesome-logo" src="../../images/awesome-dark-1.svg">
+        </figure>
+        <figure class="lightmode" id="justified-logo">
+            <img alt="awesome-logo" src="../../images/awesome2.svg">
+        </figure>
+    </header>
+    <header id="navbar">
+        <a class="logo" href="/">
+            <figure class="darkmode zero-margins">
+                <img id="nav-logo-dark" alt="awesome-logo" src="../../images/awesome-dark-1.svg">
+            </figure>
+            <figure class="lightmode zero-margins">
+                <img id="nav-logo-light" alt="awesome-logo" src="../../images/awesome2.svg">
+            </figure>
+        </a>
+        <nav class="active-menu-watch">
+            <ul class="nav__links">
+                <li><a class="nav__href menu-about" href="../../index.html">Home</a></li>
+                <li><a class="nav__href menu-download" href="../../download/">Download</a></li>
+                <li><a class="nav__href menu-community" href="../../community/">Community</a></li>
+                <li><a class="nav__href menu-recipes" href="../../recipes/">Recipes</a></li>
+                <li><a class="nav__href menu-screenshots" href="../../screenshots/">Screenshots</a></li>
+                <li><a class="nav__href menu-doc" href="../../doc/">Doc</a></li>
+                <li><a class="nav__href menu-issues" href="https://github.com/awesomeWM/awesome/issues">Bugs/Issues</a></li>
+            </ul>
+        </nav>
+        <p class="menu cta">Menu</p>
+        <!-- dark/light support -->
+        <ul class="mode-switch">
+            <li><label class="switch"><input type="checkbox"><span class="slider round"></span></label></li>
+        </ul>
+    </header>
+    <div class="overlay">
+        <a class="close">&times;</a>
+        <div class="overlay__content active-menu-watch">
+            <a class="menu-about" href="../../index.html">Home</a>
+            <a class="menu-download" href="../../download/">Download</a>
+            <a class="menu-community" href="../../community/">Community</a>
+            <a class="menu-recipes" href="../../recipes/">Recipes</a>
+            <a class="menu-screenshots" href="../../screenshots/">Screenshots</a>
+            <a class="menu-doc" href="../../doc/">Doc</a>
+            <a class="menu-issues" href="https://github.com/awesomeWM/awesome/issues">Bugs/Issues</a>
+        </div>
+    </div>
+
+    <article id="content">
+        <h1><a href="https://awesomewm.org/doc/api/classes/awful.widget.watch.html"><code>awful.widget.watch</code></a> use case examples</h1>
+
+<h2>bitcoin</h2>
+
+<p>Requires <code>curl</code> and <a href="https://github.com/LuaDist/dkjson">dkjson</a> or <a href="https://github.com/copycat-killer/lain">lain</a>.</p>
+
+<p>```lua
+local bitcoin = awful.widget.watch(
+    "curl -m5 -s 'https://coinbase.com/api/v1/prices/buy'",
+    43200, -- half day
+    function(widget, stdout)
+        local btc, pos, err = require("dkjson").decode(stdout, 1, nil) -- dkjson
+        --local btc, pos, err = require("lain.util").dkjson.decode(stdout, 1, nil) -- lain
+        local btc_price = (not err and btc and btc["subtotal"]["amount"]) or "N/A"</p>
+
+<pre><code>    -- customize here
+    widget:set_text(btc_price)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>brtfs</h2>
+
+<p>```lua
+-- btrfs root df
+local myrootfs = awful.widget.watch(
+    "btrfs filesystem df -g /",
+    600, -- 10 minutes
+    function(widget, stdout)
+        local total, used  = string.match(stdout, "Data.-total=(%d+%.%d+)GiB.-used=(%d+%.%d+)GiB")
+        local percent_used = math.ceil((tonumber(used) / tonumber(total)) * 100)</p>
+
+<pre><code>    -- customize here
+    widget:set_text(" [/: " .. percent_used .. "%] ")
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>cmus</h2>
+
+<p>```lua
+-- cmus audio player
+local cmus, cmus_timer = awful.widget.watch(
+    "cmus-remote -Q",
+    2,
+    function(widget, stdout)
+        local cmus_now = {
+            state   = "N/A",
+            artist  = "N/A",
+            title   = "N/A",
+            album   = "N/A"
+        }</p>
+
+<pre><code>    for w in string.gmatch(stdout, "(.-)tag") do
+        a, b = w:match("(%w+) (.-)\n")
+        cmus_now[a] = b
+    end
+
+    -- customize here
+    widget:set_text(cmus_now.artist .. " - " .. cmus_now.title)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>iostat</h2>
+
+<p>```lua
+-- disk I/O using iostat from sysstat utilities
+local iotable = {}
+local iostat = awful.widget.watch("iostat -dk", 2, -- in Kb, use -dm for Mb
+    function(widget, stdout)
+        for line in stdout:match("(sd.<em>)\n"):gmatch("(.-)\n") do
+            local device, tps, read_s, wrtn_s, read, wrtn =
+            line:match("(%w+)%s</em>(%d+,?%d*)%s*(%d+,?%d*)%s*(%d+,?%d*)%s*(%d+,?%d*)%s*(%d+,?%d*)")
+            --                  [1]  [2]     [3]     [4]   [5]
+            iotable[device] = { tps, read_s, wrtn_s, read, wrtn }
+        end</p>
+
+<pre><code>    -- customize here
+    widget:set_text("sda: "..iotable["sda"][2].."/"..iotable["sda"][3]) -- read_s/wrtn_s
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>maildir</h2>
+
+<p>```lua
+-- checks whether there are files in the "new" directories of a mail dirtree
+local mailpath = "~/Mail"
+local mymaildir = awful.widget.watch(
+    { awful.util.shell, "-c", string.format("ls -1dr %s/<em>/new/</em>", mailpath) },
+    60,
+    function(widget, stdout)
+        local inbox_now = { digest = "" }</p>
+
+<pre><code>    for dir in stdout:gmatch(".-/(%w+)/new") do
+        inbox_now[dir] = 1
+        for _ in stdout:gmatch(dir) do
+            inbox_now[dir] = inbox_now[dir] + 1
+        end
+        if #inbox_now.digest &gt; 0 then inbox_now.digest = inbox_now.digest .. ", " end
+        inbox_now.digest = inbox_now.digest .. string.format("%s (%d)", dir, inbox_now[dir])
+    end
+
+    -- customize here
+    widget:set_text("mail: " .. inbox_now.digest)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>mpris</h2>
+
+<p>```lua
+-- infos from mpris clients such as spotify and VLC
+-- based on https://github.com/acrisci/playerctl
+local mpris, mpris_timer = awful.widget.watch(
+    { awful.util.shell, "-c", "playerctl status &amp;&amp; playerctl metadata" },
+    2,
+    function(widget, stdout)
+         local escape_f  = require("awful.util").escape
+         local mpris_now = {
+             state        = "N/A",
+             artist       = "N/A",
+             title        = "N/A",
+             art_url      = "N/A",
+             album        = "N/A",
+             album_artist = "N/A"
+         }</p>
+
+<pre><code>     mpris_now.state = string.match(stdout, "Playing") or
+                       string.match(stdout, "Paused")  or "N/A"
+
+     for k, v in string.gmatch(stdout, "'[^:]+:([^']+)':[%s]&lt;%[?'([^']+)'%]?&gt;")
+     do
+         if     k == "artUrl"      then mpris_now.art_url      = v
+         elseif k == "artist"      then mpris_now.artist       = escape_f(v)
+         elseif k == "title"       then mpris_now.title        = escape_f(v)
+         elseif k == "album"       then mpris_now.album        = escape_f(v)
+         elseif k == "albumArtist" then mpris_now.album_artist = escape_f(v)
+         end
+     end
+
+    -- customize here
+    widget:set_text(mpris_now.artist .. " - " .. mpris_now.title)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>pipewire</h2>
+
+<p>```lua
+-- pactl based volume widget for pure pipewire setups
+local volume = awful.widget.watch(
+    "pactl get-sink-volume @DEFAULT_SINK@ | cut -s -d/ -f2,4; pactl get-sink-mute @DEFAULT_SINK@",
+    5, -- timeout 
+    function(widget, stdout)
+        local volume = "Volume: "
+        for v in stdout:gmatch("(%d+%%)") do volume = volume .. " " .. v end
+        if #volume == 8 then volume = "N/A" end
+        local mute = string.match(stdout, "Mute: (%S+)") or "N/A"</p>
+
+<pre><code>    -- customize here
+    widget:set_markup(volume .. " " .. mute)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+<h2>upower</h2>
+
+<p>```lua
+-- battery infos from freedesktop upower
+local mybattery = awful.widget.watch(
+    { awful.util.shell, "-c", "upower -i /org/freedesktop/UPower/devices/battery_BAT | sed -n '/present/,/icon-name/p'" },
+    30,
+    function(widget, stdout)
+        local bat_now = {
+            present      = "N/A",
+            state        = "N/A",
+            warninglevel = "N/A",
+            energy       = "N/A",
+            energyfull   = "N/A",
+            energyrate   = "N/A",
+            voltage      = "N/A",
+            percentage   = "N/A",
+            capacity     = "N/A",
+            icon         = "N/A"
+        }</p>
+
+<pre><code>    for k, v in string.gmatch(stdout, '([%a]+[%a|-]+):%s*([%a|%d]+[,|%a|%d]-)') do
+        if     k == "present"       then bat_now.present      = v
+        elseif k == "state"         then bat_now.state        = v
+        elseif k == "warning-level" then bat_now.warninglevel = v
+        elseif k == "energy"        then bat_now.energy       = string.gsub(v, ",", ".") -- Wh
+        elseif k == "energy-full"   then bat_now.energyfull   = string.gsub(v, ",", ".") -- Wh
+        elseif k == "energy-rate"   then bat_now.energyrate   = string.gsub(v, ",", ".") -- W
+        elseif k == "voltage"       then bat_now.voltage      = string.gsub(v, ",", ".") -- V
+        elseif k == "percentage"    then bat_now.percentage   = tonumber(v)              -- %
+        elseif k == "capacity"      then bat_now.capacity     = string.gsub(v, ",", ".") -- %
+        elseif k == "icon-name"     then bat_now.icon         = v
+        end
+    end
+
+    -- customize here
+    widget:set_text("Bat: " .. bat_now.percentage .. " " .. bat_now.state)
+end
+</code></pre>
+
+<p>)
+```</p>
+
+    </article>
+
+    <section id="clear"></section>
+
+    <footer>
+        <section id="pageinfo">
+            <figure class="darkmode">
+                <img class="aw-anniversary" alt="15years anniversary" src="../../images/awesome-15yrs-anniversary-dark.svg"
+                    width="250">
+            </figure>
+            <figure class="lightmode">
+                <img class="aw-anniversary" alt="15years anniversary" src="../../images/awesome-15yrs-anniversary.svg" width="250">
+            </figure>
+
+            <script type='text/javascript'
+                src='https://www.openhub.net/p/awesome/widgets/project_factoids_stats?format=js'></script>
+
+            <section id="donate">
+                <strong>Donations:</strong>
+                <div>
+                    <script
+                        id='fbirvwx'>(function (i) { var f, s = document.getElementById(i); f = document.createElement('iframe'); f.src = 'https://button.flattr.com/view/?fid=mqwonm&button=compact&url=https%3A%2F%2Fawesomewm.org%2F'; f.title = 'Flattr'; f.height = 20; f.width = 110; f.style.borderWidth = 0; s.parentNode.insertBefore(f, s); })('fbirvwx');</script>
+                </div>
+                <p>Bitcoin: 1A2LsrF81rWEEJ7qnXdkCUJpdCYUxqfQoP</p>
+            </section>
+
+            <section class="copyright">
+                <a id="pagecopyright"></a>
+                
+                Copyleft 2007-2022, AwesomeWM project
+            </section>
+
+            
+
+            <section class="pagedate">
+                Last edited <span class="date">Sat 10 Sep 2022 05:05:09 PM CEST</span>
+            </section>
+        </section>
+    </footer>
+
+    <script defer src="../../script/navscroll.js"></script>
+        <script defer src="../../script/mobile.js"></script>
+    <script defer src="../../script/dark-light-mode-switch.js"></script>
+    <!-- Piwik -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(["setCookieDomain", "*.awesomewm.org"]);
+        _paq.push(["setDomains", ["*.awesomewm.org"]]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "https://piwik.awesomewm.org/";
+            _paq.push(['setTrackerUrl', u + 'piwik.php']);
+            _paq.push(['setSiteId', 26]);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <noscript>
+        <p><img src="https://piwik.awesomewm.org/piwik.php?idsite=26" style="border:0;" alt="" /></p>
+    </noscript>
+</body>
+</html>
